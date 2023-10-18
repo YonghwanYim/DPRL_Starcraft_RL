@@ -35,5 +35,5 @@ You can watch some videos that trained vulture do tasks.
 
 
 # Appendix
-<p align="center"><img width="605" alt="Screenshot 2023-10-18 at 10 30 39 AM" src="https://github.com/YonghwanYim/DPRL_Starcraft_RL/assets/37505110/292b1d59-1d4e-463b-9dda-7a04f6e1e909"></p>
+<p align="center"><img width="605" alt="Screenshot 2023-10-18 at 10 30 39 AM" src="https://github.com/YonghwanYim/DPRL_Starcraft_RL/assets/37505110/292b1d59-1d4e-463b-9dda-7a04f6e1e909" height="100px" width="300px"></p>
 

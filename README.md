@@ -19,7 +19,7 @@ You can watch some videos that trained vulture do tasks.
 <img width="1454" alt="Screenshot 2023-10-18 at 10 28 34 AM" src="https://github.com/YonghwanYim/DPRL_Starcraft_RL/assets/37505110/8ec8c305-645f-426b-ab78-6809850e9b36">
 
 
-<img width="639" alt="Screenshot 2023-10-18 at 10 29 09 AM" src="https://github.com/YonghwanYim/DPRL_Starcraft_RL/assets/37505110/4e0426e4-179b-4436-9e85-1abc97f081a6">
+<center><img width="639" alt="Screenshot 2023-10-18 at 10 29 09 AM" src="https://github.com/YonghwanYim/DPRL_Starcraft_RL/assets/37505110/4e0426e4-179b-4436-9e85-1abc97f081a6"></center>
 
 
 <img width="540" alt="Screenshot 2023-10-18 at 10 29 18 AM" src="https://github.com/YonghwanYim/DPRL_Starcraft_RL/assets/37505110/09612951-095c-45fc-a45a-eebaffe25cc5">

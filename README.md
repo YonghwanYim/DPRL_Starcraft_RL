@@ -1,5 +1,7 @@
 # Starcraft 2 Vulture P-Control
 
+This repository contains the project for the course IE540: Dynamic Programming and Reinforcement Learning at KAIST, completed in Spring 2023.
+
 We trained a vulture using DQN, DDQN, DuelingDQN, DuelingDDQN.
 You can watch some videos that trained vulture do tasks.
 

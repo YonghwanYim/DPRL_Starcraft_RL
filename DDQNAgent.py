@@ -47,7 +47,6 @@ MAX_NORM = 5 # for gradient clipping
 writer = SummaryWriter()
 
 
-
 # Action Define.
 UP, DOWN, LEFT, RIGHT = 'up', 'down', 'left', 'right'
 UP_R, UP_L, DOWN_R, DOWN_L = 'up_r', 'up_l', 'down_r', 'down_l'
@@ -59,6 +58,7 @@ interface = features.AgentInterfaceFormat(
     feature_dimensions=features.Dimensions(
         screen=SCREEN_SIZE, minimap=MINIMAP_SIZE), use_feature_units=True)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 class DDQN(nn.Module):
     def __init__(self, dimState, dimAction, hidden_dim):
         super(DDQN, self).__init__()
@@ -67,6 +67,7 @@ class DDQN(nn.Module):
         #self.fc3 = nn.Linear(hidden_dim, hidden_dim)
         #self.fc4 = nn.Linear(hidden_dim, hidden_dim)
         self.fc3 = nn.Linear(hidden_dim, dimAction)
+        
     def forward(self, x):
         h = F.relu(self.fc1(x))
         h = F.relu(self.fc2(h))
@@ -74,6 +75,7 @@ class DDQN(nn.Module):
         #h = F.relu(self.fc4(h))
         out = self.fc3(h)
         return out
+        
 class ReplayBuffer:
     def __init__(self, maxlen, dimState):
         self.maxlen = maxlen
@@ -85,6 +87,7 @@ class ReplayBuffer:
         self.mask_buff = np.zeros(self.maxlen, dtype=np.uint8)
         self.filled = 0
         self.position = 0
+        
     def push(self, s, a, r, sp, mask):
         self.state_buff[self.position] = s
         self.act_buff[self.position] = a
@@ -94,6 +97,7 @@ class ReplayBuffer:
         self.position = (self.position + 1) % self.maxlen
         if self.filled < self.maxlen:
             self.filled += 1
+            
     def sample(self, batch_size):
         idx = np.random.choice(np.arange(self.filled), size=batch_size,
                                replace=True)
@@ -103,8 +107,10 @@ class ReplayBuffer:
         sp = torch.FloatTensor(self.next_state_buff[idx])
         mask = torch.Tensor(self.mask_buff[idx])
         return s, a, r, sp, mask
+        
     def __len__(self):
         return self.filled
+        
     def clear(self):
         self.state_buff = np.zeros((self.maxlen, self.dimState), dtype=np.float32)
         self.act_buff = np.zeros((self.maxlen, 1), dtype=np.int64)
@@ -113,6 +119,7 @@ class ReplayBuffer:
         self.mask_buff = np.zeros(self.maxlen, dtype=np.uint8)
         self.filled_i = 0
         self.curr_i = 0
+        
 class Agent(base_agent.BaseAgent):
     def __init__(self, env):
         super(Agent, self).__init__()
@@ -142,12 +149,15 @@ class Agent(base_agent.BaseAgent):
         #self.eps_step = 1/MAX_EPISODE
         self.maxLoss = 0
         self.N_STEP = 0
+        
     def save(self, fname):
         torch.save(self.qnet_A.state_dict(), 'A_'+fname)
         torch.save(self.qnet_B.state_dict(), 'B_'+fname)
+        
     def load(self, fname):
         self.qnet_A.load_state_dict(torch.load('A_'+fname))
         self.qnet_B.load_state_dict(torch.load('B_'+fname))
+        
     # Epsilon-greedy policy
     def getAction(self, state):
         p = np.random.random()
@@ -158,13 +168,16 @@ class Agent(base_agent.BaseAgent):
                 return np.random.randint(self.dimAction)
         else:
             return self.qnet_A(state).argmax().item()
+            
     def hard_update(self):
         for target, source in zip(self.qnet_B.parameters(), self.qnet_A.parameters()):
             target.data.copy_(source.data)
+            
     def soft_update(self):
         for target, source in zip(self.qnet_B.parameters(), self.qnet_A.parameters()):
             average = target.data * (1. - self.tau) + source.data * self.tau
             target.data.copy_(average)
+            
     def train(self):
         if len(self.memory) < self.batch_size:
             return
@@ -181,7 +194,6 @@ class Agent(base_agent.BaseAgent):
         l = loss.item()
         lossHist.append(l)
         return l
-
 
     def act(self, action, position, obs):
         re_position = ((position[0] * _X_NORMALIZE / 2 + 31), (position[1] * _Y_NORMALIZE / 2 + 23))
@@ -303,12 +315,14 @@ class Agent(base_agent.BaseAgent):
                     return rewards, score
                 break
         return rewards
+        
     def runTest(self):
         rewards, score = self.runEpisode(test=True)
         ret = sum(rewards)
         nStep = len(rewards)
         print("Test episode, return = %.1f in %d steps" % (ret, nStep))
         return ret
+        
     # Run multiple episodes to train the agent
     # and give a learning plot
     def runMany(self, nEpisode, fname):
@@ -389,6 +403,7 @@ class Agent(base_agent.BaseAgent):
             plt.plot(movAvg)
         plt.title(title)
         plt.show()
+        
 def trainAgentDQN(fname):
     try:
         with sc2_env.SC2Env(map_name=MAPNAME, players=players,
@@ -399,6 +414,7 @@ def trainAgentDQN(fname):
             agent.runMany(MAX_EPISODE, fname=fname)
     except KeyboardInterrupt:
         pass
+        
 def trainContinuingAgentDQN(fname):
     try:
         with sc2_env.SC2Env(map_name=MAPNAME, players=players,
@@ -411,6 +427,7 @@ def trainContinuingAgentDQN(fname):
             agent.runMany(MAX_EPISODE, fname=fname)
     except KeyboardInterrupt:
         pass
+        
 def testBestAgentDQN(fname):
     try:
         with sc2_env.SC2Env(map_name=MAPNAME, players=players,
@@ -422,6 +439,7 @@ def testBestAgentDQN(fname):
             agent.runTest()
     except KeyboardInterrupt:
         pass
+        
 def testManyAgentDQN(fname):
     try:
         with sc2_env.SC2Env(map_name=MAPNAME, players=players,

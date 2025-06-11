@@ -62,15 +62,11 @@ class DQN(nn.Module):
         super(DQN, self).__init__()
         self.fc1 = nn.Linear(dimState, hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, hidden_dim)
-        #self.fc3 = nn.Linear(hidden_dim, hidden_dim)
-        #self.fc4 = nn.Linear(hidden_dim, hidden_dim)
         self.fc3 = nn.Linear(hidden_dim, dimAction)
         
     def forward(self, x):
         h = F.relu(self.fc1(x))
         h = F.relu(self.fc2(h))
-        #h = F.relu(self.fc3(h))
-        #h = F.relu(self.fc4(h))
         out = self.fc3(h)
         return out
         
